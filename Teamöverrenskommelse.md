@@ -4,27 +4,10 @@ En lista på vårt team och villa roller vi har.
 
 ## The team
 
-@Ludvig Alm
-@Jesper Thomsen - Facilitator - Tidshållare
-@Stefan Antovic - Presentatör - Kundens röst
-@Edvin Pihl
-
-
-@jesperthomsen-git
-jesperthomsen-git
-Collaborator
-
-@edvin-pihl
-edvin-pihl
-Collaborator
-
-@LudvigAlm
-LudvigAlm
-Collaborator
-
-@Stefan-Antovic
-Stefan-Antovic
-Collaborator 
+@LudvigAlm (Ludvig Alm)<br>
+@jesperthomsen-git (Jesper Thomsen) - Facilitator - Tidshållare<br>
+@Stefan-Antovic (Stefan Antovic) - Presentatör - Kundens röst<br>
+@edvin-pihl (Edvin Pihl)
 
 # Teamöverenskommelse
 
@@ -40,13 +23,3 @@ Vi kommer att rösta fram olika beslut, demokratiskt. - @Jesper Thomsen - har si
 ## Vår regel
 
 Respektera varandra, låt allas röster höras
-
-## Key links
-
-Vi har skapat en "Boiler room"-mapp på Google Drive där vi kommer att samla allt material vi använder, till exempel anteckningar och andra bilagor.
-
-
-*  All boiler room material laddas upp på länken nedan:
-*  https://drive.google.com/drive/folders/1Vl3WqPi4rUBIEvytICql_JsDrYct7P_w?usp=drive_link
-
-Testar Branch
