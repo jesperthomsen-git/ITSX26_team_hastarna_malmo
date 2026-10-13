@@ -21,7 +21,6 @@ Main/<br>
 │<br>
 ├── scripts/<br>
 │<br>
-│<br>
 ├── Teamöverrenskommelse.md<br>
 ├── tillgangsforteckning.md<br>
 ├── trafikbaslinje.md<br>
