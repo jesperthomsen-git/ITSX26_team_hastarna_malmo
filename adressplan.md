@@ -23,3 +23,9 @@
 ---
 ## Sammanfattning av utrymmet
 Genom att dela in nätverken i block som följer 2-potenser och är sorterade i ordning kan ovanstående struktur enkelt sammanfattas eller expanderas i framtiden utan fragmentering av IP-adresser.
+# Adressplan
+
+**Förutsättningar:** Uppdragsgivarens adressutrymme är 10.40.0.0/16. Planen omfattar IPv4. IPv6 är avstängt på labbservrarna och ingår inte i planen.
+
+| Prefix | Syfte | Adressintervall (första–sista) | Ansvarig tjänst | Reserverat utrymme | Kommentar och uträkning |
+|---|---|---|---|---|---|
