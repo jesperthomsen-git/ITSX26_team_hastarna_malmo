@@ -6,6 +6,22 @@
 - Alla nätverk är sorterade i storleksordning för att underlätta framtida rutt-summering (supernetting).
 - Ingen rad utan tillhörande uträkning.
 
+## Zonindelningen
+
+Nedan är en grundidé av hur zonerna är indelade enligt adressplanen.
+<pre>
+Internet
+   │
+[Brandvägg]
+   │
+DMZ ── tillåtna flöden ── Applikation ── nödvändiga flöden ── Data
+                              │
+                         Driftstjänster
+
+Klienter ── tillåtna användarflöden ── Applikation
+Management ── begränsad administratörsåtkomst ── servrar
+</pre>
+
 ## Tabell över Adressplan
 
 | Prefix | Syfte | Adressintervall (första–sista) | Ansvarig tjänst | Reserverat utrymme | Kommentar / Uträkning |
