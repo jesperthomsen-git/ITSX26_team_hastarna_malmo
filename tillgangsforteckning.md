@@ -1,6 +1,6 @@
 # Tillgångsförteckning  
 
-Det här är ett planeringsregister baserat på adressplanen. Det innehåller zoner och tillgångsgrupper, inte en verifierad lista över installerade servrar. Lägg till en rad för varje faktisk server, virtuell maskin, nätverksenhet och klient. Fyll i faktiska namn och IP-adresser när de är kända.  
+Det här är ett planeringsregister baserat på adressplanen. Det innehåller zoner och tillgångsgrupper, inte en verifierad lista över installerade servrar.  
 
 | ID | Tillgång eller grupp | Nät | Exempel på innehåll | Föreslagen ansvarig | Kritikalitet / exponering |
 |---|---|---|---|---|---|
