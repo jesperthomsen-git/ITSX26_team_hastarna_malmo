@@ -7,27 +7,31 @@ Uppdragsgivaren är ett mellanstort svenskt företag med drift i molnet och krav
 ## projektstruktur
 
 Projektstrukturen ser ut som följande
-
-Main/<br>
-├── README.md<br>
-│<br>
-├── SDP/<br>
-│<br>
-├── apps/<br>
-│<br>
-├── docs/<br>
-│<br>
-├── evidence/<br>
-│<br>
-├── scripts/<br>
-│<br>
-├── Teamöverrenskommelse.md<br>
-├── adressplan.md<br>
-├── ai_usage.md<br>
-├── tillgangsforteckning.md<br>
-├── tillitsregler.md<br>
-└── trafikbaslinje.md<br>
-
+<pre>
+Main/
+├── README.md
+│
+├── SDP/
+│
+├── apps/
+│
+├── docs/
+│    ├── edvin/
+│    ├── jesper/
+│    ├── ludvig/
+│    └── stefan/
+│
+├── evidence/
+│
+├── scripts/
+│
+├── Teamöverrenskommelse.md
+├── adressplan.md
+├── ai_usage.md
+├── tillgangsforteckning.md
+├── tillitsregler.md
+└── trafikbaslinje.md
+</pre>pre
 
 --------------------------------------------
 
