@@ -7,6 +7,7 @@ Uppdragsgivaren är ett mellanstort svenskt företag med drift i molnet och krav
 ## projektstruktur
 
 Projektstrukturen ser ut som följande
+
 <pre>
 Main/
 ├── README.md
@@ -31,7 +32,7 @@ Main/
 ├── tillgangsforteckning.md
 ├── tillitsregler.md
 └── trafikbaslinje.md
-</pre>pre
+</pre>
 
 --------------------------------------------
 
