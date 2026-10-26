@@ -20,18 +20,18 @@ Main/
 │    ├── edvin/
 │    ├── jesper/
 │    ├── ludvig/
-│    └── stefan/
+│    ├── stefan/
+│    └── old-docs/ #legacy filer för äldre dokument som inte längre används.
 │
 ├── evidence/
 │
 ├── scripts/
 │
-├── Teamöverrenskommelse.md
-├── adressplan.md
-├── ai_usage.md
-├── tillgangsforteckning.md
-├── tillitsregler.md
-└── trafikbaslinje.md
+├── 01-adressplan.md
+├── 02-trafikbaslinje.md
+├── 03-tillitsregler.md
+├── teamöverrenskommelse.md
+└── ai_usage.md
 </pre>
 
 --------------------------------------------
