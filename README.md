@@ -25,6 +25,10 @@ Main/
 │
 ├── evidence/
 │
+├── projects/
+│    ├── praktisk/
+│    └── teoretisk/
+│
 ├── scripts/
 │
 ├── 01-adressplan.md
