@@ -43,10 +43,10 @@ Subnäten ligger på jämna gränser för sin storlek (/28 på 0 och 16, /29 på
 
 | Adress | Server | Adress i labbnätet idag | Subnät | Ansvarig | Status |
 |---|---|---|---|---|---|
-| 10.40.4.10 | elev-35 | ej dokumenterad | Webb / DMZ | Edvin Pihl | Planerad |
-| 10.40.4.20 | elev-10 | 172.20.1.110 | Applikation | Stefan Antovic | Planerad |
-| 10.40.4.34 | elev-05 | ej dokumenterad | Databas | Ludvig Alm | Planerad |
-| 10.40.4.42 | elev-43 | ej dokumenterad | Management | Jesper Thomsen | Planerad |
+| 10.40.4.41 | elev-35 | ej dokumenterad | Management | Edvin Pihl | Planerad |
+| 10.40.4.42 | elev-10 | 172.20.1.110 | Management | Stefan Antovic | Planerad |
+| 10.40.4.43 | elev-05 | ej dokumenterad | Management | Ludvig Alm | Planerad |
+| 10.40.4.44 | elev-43 | ej dokumenterad | Management | Jesper Thomsen | Planerad |
 
 Servrarna kopplas in med nytt nätkort (eth2). Status ändras till Aktiv när servern är inkopplad och adressen verifierad med `ip -br addr`.
 
