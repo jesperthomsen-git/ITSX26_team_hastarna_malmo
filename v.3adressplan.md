@@ -44,7 +44,7 @@ Subnäten ligger på jämna gränser för sin storlek (/28 på 0 och 16, /29 på
 | Adress | Server | Adress i labbnätet idag | Subnät | Ansvarig | Status |
 |---|---|---|---|---|---|
 | 10.40.4.10 | elev-05 | ej dokumenterad | Webb / DMZ (10.40.4.0/28) | Ludvig Alm | Planerad |
-| 10.40.4.20 | elev-10 | 172.20.1.110 | Applikation (10.40.4.16/28) | Stefan Antovic | Planerad |
+| 10.40.4.20 | elev-10 | 172.20.1.110 | Applikation (10.40.4.16/28) | Stefan Antovic | Aktiv |
 | 10.40.4.34 | elev-43 | ej dokumenterad | Databas (10.40.4.32/29) | Jesper Thomsen | Planerad |
 | 10.40.4.42 | elev-35 | ej dokumenterad | Klient (10.40.4.40/29) | Edvin Pihl | Planerad |
 
