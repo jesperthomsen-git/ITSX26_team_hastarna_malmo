@@ -1,4 +1,4 @@
-### Mall: spårbarhetslista
+### Spårbarhetslista
 
 | Rad-id | Riktning | Källa | Mål | Proto/port | Lager (moln/värd) | Regelns identifierare | Loggar? | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
