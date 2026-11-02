@@ -1,0 +1,9 @@
+id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt
+F3-till,elev-10,10.40.4.34,5432,tcp,ut,oppen,
+F3-nek,elev-10,10.40.4.34,5433,tcp,ut,tyst,
+D5-till,elev-10,172.20.1.58,514,tcp,ut,oppen,
+D5-nek,elev-10,172.20.1.58,515,tcp,ut,tyst,
+D3-till,elev-10,185.12.64.1,53,tcp,ut,oppen,
+D3-nek,elev-10,1.1.1.1,53,tcp,ut,tyst,
+D7-till,elev-10,104.20.23.154,443,tcp,ut,oppen,
+D7-nek,elev-10,104.20.23.154,8443,tcp,ut,tyst,
