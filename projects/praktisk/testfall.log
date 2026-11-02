@@ -1,0 +1,9 @@
+[student@elev-10 ~]$ ./test.sh testfall.csv
+id,forvantat,faktiskt
+F3-till,oppen,tyst (3003 ms)
+F3-nek,tyst,tyst (3003 ms)
+D5-till,oppen,oppen (4 ms)
+D5-nek,tyst,tyst (3004 ms)
+D3-till,oppen,oppen (8 ms)
+D3-nek,tyst,tyst (3005 ms)
+D7-till,oppen,tyst (3004 ms)
