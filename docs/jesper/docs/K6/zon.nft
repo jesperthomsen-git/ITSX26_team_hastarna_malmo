@@ -1,0 +1,43 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+table inet zon {
+
+        chain in {
+
+                type filter hook input priority 0; policy drop;
+                ct state established,related accept
+                ct state invalid drop
+                iif "lo" accept
+                ip saddr 172.20.1.2 tcp dport 22 accept comment "D1 SSH från jump"
+                ip saddr 172.20.1.10 tcp dport 22 accept comment "D2 kontroll från ctf"
+                # F1, F2 … – era rader ur flödestabellen, en regel per rad
+                ip saddr 172.20.1.10 tcp dport 20133 reject comment "F1 Avvisa lyssnare på förbjuden port"
+                ip saddr 172.20.1.203 tcp dport 20133 reject comment "F2 Avvisa lyssnare på förbjuden port"
+                ip saddr 172.20.1.10 tcp dport 28571 accept comment "F3 tyst regel att inte svara på denna port"
+                ip saddr 172.20.1.203 tcp dport 28571 drop comment "F4 tyst regel att inte svara på denna port"
+                limit rate 10/minute log prefix "ZON-IN-DROP " level info
+
+        }
+
+        chain ut {
+
+                type filter hook output priority 0; policy drop;
+                #ip daddr 172.20.1.10 tcp sport 20133 reject with tcp reset comment "F1 avvisa svar från port 20133"
+                ct state established,related accept
+                oif "lo" accept
+                 ip daddr { 185.12.64.1, 185.12.64.2 } meta l4proto { tcp, udp } th dport 53 accept comment "D3DNS"
+                #ip daddr 172.20.1.58 tcp dport 514 accept comment "D5 logg till log"
+                udp sport 68 udp dport 67 accept comment "D6 DHCP-förnyelse"
+                tcp dport 443 accept comment "D7 HTTPS package updates"
+                tcp dport 80 accept comment "D7 HTTPS package updates"
+                # F-rader i utgående riktning
+                #ip daddr 172.20.1.10 tcp dport 20133 reject comment "F1 Avvisa lyssnare på förbjuden port"
+                #ip daddr 172.20.1.10 tcp dport 28571 drop comment "F2 tyst regel att inte svara på denna port"
+                ip daddr 172.20.1.58 tcp dport 6514 accept comment "D6 log till log genom TLS"
+                limit rate 10/minute log prefix "ZON-UT-DROP " level info
+                ip daddr 1.1.1.1 tcp dport 8080 accept comment "F3 Test echo > /dev/tcp/1.1.1.1/8080"
+                }
+
+}
