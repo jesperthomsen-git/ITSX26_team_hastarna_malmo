@@ -3,7 +3,7 @@
 ---  
 SSH, HTTP användar protokoll  
   
-Stödprotokoll: DNS uppslag, NTP, DHCP  
+Stödprotokoll: DNS uppslag, NTP, DHCP 
 ### Säkerhetsrisk:  
 Innehållet sysns i app. lager, om paket skickas okrypterat syns hela paketet  
   
