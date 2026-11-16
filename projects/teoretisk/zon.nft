@@ -13,21 +13,16 @@ table inet zon {
         iifname "eth1" ip saddr 172.20.1.10 tcp dport 22 accept comment "D2 kontroll från ctf"
 
         # F1: Publik webb portal (elev-05)
-        ip daddr 10.40.4.10 tcp dport 80 accept comment "F1 Publik webb"
-
-        # F4: Klient portal (elev-35 -> elev-05)
-        ip saddr 10.40.4.42 ip daddr 10.40.4.10 tcp dport 80 accept comment "F4 Klient portal"
-
-        # F2: Portal till Application (elev-05 -> elev-10)
-        ip saddr 10.40.4.10 ip daddr 10.40.4.20 tcp dport 8080 accept comment "F2 Från web"
+        ip daddr 10.40.4.10 tcp dport 80 accept comment "F1 Internet till publik webb"
 
         # F3: Application till Database (elev-10 -> elev-43)
-        ip saddr 10.40.4.20 ip daddr 10.40.4.34 tcp dport 5432 accept comment "F3 från app"
+        ip saddr 10.40.4.20 ip daddr 10.40.4.34 tcp dport 5432 accept comment "F3 från app till databas"
 
         limit rate 10/minute log prefix "ZON-IN-DROP " level info
     }
 
-    chain ut {
+
+chain ut {
         type filter hook output priority 0; policy drop;
         ct state established,related accept
         oif "lo" accept
@@ -39,7 +34,7 @@ table inet zon {
         ip daddr 213.239.239.164 udp dport 123 accept comment "D4 NTP chrony"
 
         # D5: Skickar firewall logs
-        ip daddr 172.20.1.58 tcp dport 514 accept comment "D5 logg till log"
+        ip daddr 172.20.1.58 tcp dport 6514 accept comment "D5 logg till log över mTLS"
 
         # D6: DHCP-förnyelse
         oifname "eth1" ip daddr 172.20.0.1 udp sport 68 udp dport 67 accept comment "D6 DHCP eth1"
@@ -49,13 +44,13 @@ table inet zon {
         tcp dport 443 accept comment "D7 HTTPS paketuppdateringar"
 
         # F2: Portal till Applikation (elev-05 -> elev-10)
-        ip saddr 10.40.4.10 ip daddr 10.40.4.20 tcp dport 8080 accept comment "F2 till app"
+        ip saddr 10.40.4.10 ip daddr 10.40.4.20 tcp dport 8080 accept comment "F2 Portal till app"
 
         # F3: Applikation till Databas (elev-10 -> elev-43)
-        ip saddr 10.40.4.20 ip daddr 10.40.4.34 tcp dport 5432 accept comment "F3 till databas"
+        ip saddr 10.40.4.20 ip daddr 10.40.4.34 tcp dport 5432 accept comment "F3 App till databas"
 
         # F4: Klientportal (elev-35 -> elev-05)
-        ip saddr 10.40.4.42 ip daddr 10.40.4.10 tcp dport 80 accept comment "F4 till portal"
+        ip saddr 10.40.4.42 ip daddr 10.40.4.10 tcp dport 80 accept comment "F4 Klient till portal"
 
         limit rate 10/minute log prefix "ZON-UT-DROP " level info
     }
