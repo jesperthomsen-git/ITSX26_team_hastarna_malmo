@@ -124,6 +124,50 @@ Skriv alltid ett skäl som någon annan kan kontrollera.
 
 ---
 
+# Playbook D4 – Datastöld (exfiltration), FIKTIV
+
+> **FIKTIV playbook.** Vi har inget bevis för att larmet fungerar. Ingen monitor på regeln är byggd eller testad, och brus är inte mätt. Playbooken visar hur vi skulle hantera händelsen. Den ska inte tas som verifierad detektion.
+
+**Antagen regel:** `rule.mitre.id: "T1041"` (Exfiltration Over C2 Channel), index `wazuh-alerts-*`. Det är ett antagande: vi har inte sett att någon regel med det id:t larmar hos oss.
+**Monitor:** finns inte (ej byggd, ej testad).
+**Brus och falsklarmsrisk:** ej mätt.
+**Skriven av:** Stefan · **Testad av:** ej testad · **Datum:** ej testad
+
+## 1. Förberedelse
+- Vi vet att detektionen är ett antagande, och att den ska mätas och testas innan den litas på.
+- Vi har flödestabellen och adressplanen, så vi kan se vilka externa mål som är tillåtna.
+- Åtkomst till Discover (`wazuh-alerts-*` och `wazuh-archives-*`) och till servern via jump. Vi vet vem som triagerar och vem som får blockera.
+
+## 2. Upptäckt och analys
+1. Anteckna tid, `rule.id`, server (`location`), program/konto och mål (`dstip`) från larmet. Skriv bara det som står i loggen.
+2. Räkna hur mycket och hur ofta: en stor överföring, eller upprepade små med jämna mellanrum (jämför med U6.5)?
+3. **Sök utan serverfilter:** går samma mål från flera servrar?
+4. Är målet känt? Jämför mot flödestabellen och adressplanen. Är kontot ett tjänstekonto som borde göra detta (till exempel backup)?
+5. Finns det tecken på intrång före: misslyckade inloggningar (D1), root-kommando (D3) eller blockerad utgående trafik (D2)?
+
+**Eskalera om något av detta stämmer:**
+- målet är okänt och står inte i flödestabellen,
+- ett tjänstekonto eller okänt program laddar upp data,
+- det sker med jämna mellanrum eller i stor mängd,
+- det sker tillsammans med D1, D2 eller D3.
+
+**Avfärda om allt detta stämmer:**
+- målet är känt och tillåtet (står i flödestabellen),
+- programmet och kontot är avsedda för detta (till exempel en dokumenterad backup),
+- någon kan bekräfta det med ett skäl som går att kontrollera.
+
+## 3. Begränsning, utrotning och återställning
+- **Begränsa:** blockera målet i paketfiltret och molnbrandväggen. Stoppa programmet (`systemctl stop <tjänst>`). Isolera servern vid misstänkt stöld.
+- **Utrota:** ta bort det som startade överföringen (okänt program, cron-jobb, tjänst). Byt nycklar och lösenord som kan vara läckta. Leta efter nya användare.
+- **Återställ:** återinför tjänsten först när orsaken är borta. Kontrollera vad som skickats och bedöm vilken data som berörs.
+
+## 4. Aktiviteter efter incidenten
+- Skriv en post i triageloggen.
+- Bygg och mät en riktig monitor, och uppdatera nedbrytningen med brus och falsklarmsrisk.
+- Skriv vad vi lärde oss.
+
+---
+
 # Triagelogg
 
 ## Post 1 – D1 Brute force (normaltrafik)
@@ -218,4 +262,31 @@ Bedömning:      Legitimt (administrationsarbete)
 Skäl:           Kommandona gäller teamets egen regelfil (/etc/nftables/zon.nft, finns i repot)
                 och körs interaktivt från student (har sudo enligt skyddsbeskrivningen),
                 direkt efter varandra: ladda regler, kontrollera dem. Jesper (elev-43) kan
-                bekräfta att det var han vid den tiden.
+                bekräfta att det var han vid den tiden.  
+
+```
+
+## Triagepost T-D4-1 (FIKTIVT EXEMPEL, inte från en riktig logg)
+
+```
+
+- **ID:** T-D4-1
+- **Tid:** ej från riktig logg (övningsexempel)
+- **Monitor/regel:** antagen regel `rule.mitre.id: "T1041"` (ej testad)
+- **Agent/källa:** ej från riktig logg
+
+**OBSERVATION** (bara det som står i loggen, ingen tolkning)
+- **Source IP:** (exempel) intern server
+- **User:** (exempel) tjänstekonto
+- **Antal händelser och tid:** (exempel) upprepade uppladdningar med jämna mellanrum
+- **Relevant loggrad:** ingen riktig loggrad, posten är en övning
+- **Sökning utan serverfilter:** `rule.mitre.id: "T1041"` -> ej körd
+
+**SLUTSATS**
+- **Vad hände:** fiktivt, ett tjänstekonto skickar data till ett externt mål.
+- **Vad berördes:** (exempel) servern och den data som skickats.
+- **Bedömning:** skulle eskaleras om målet är okänt. Kan inte bedömas utan riktig logg.
+- **Skäl:** inget granskbart skäl ännu, eftersom larmet inte är bevisat.
+- **Vad ska göras:** bygg och mät en monitor, testa den, och gör sedan om triagen med riktiga data.  
+
+```

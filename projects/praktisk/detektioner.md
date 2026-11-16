@@ -67,4 +67,24 @@ Detektionen ägs av elev-43 (Jesper).
 | Fönstrets längd (normaltrafik) | 32 minuter = 0,53 timmar |
 | Träffar per timme (normaltrafik) | cirka 15 per timme (8 / 0,53) |
 | Brus i hela verifierade fönstret | 43 larm på elev-43 under 168 timmar (9-16 nov, Discover, Last 1 week), alltså cirka 0,26 per timme i genomsnitt. Larmen kommer i omgångar när någon arbetar på servern (till exempel 11-12 nov och 16 nov). |
-| Falsklarmsrisk | Medelhög till hög. Varje sudo till root är ett larm, och i normaltrafik kom 8 larm på 32 minuter, alla från student med läsande kommandon (till exempel `nft list ruleset`, `tail -n 50 /var/log/secure`). Larmet säger därför inte att något är fel, utan att playbooken måste skilja kända administrationskommandon från oväntade (till exempel `useradd`, `chmod`, `rm` på loggar, `nmap`). |  
+| Falsklarmsrisk | Medelhög till hög. Varje sudo till root är ett larm, och i normaltrafik kom 8 larm på 32 minuter, alla från student med läsande kommandon (till exempel `nft list ruleset`, `tail -n 50 /var/log/secure`). Larmet säger därför inte att något är fel, utan att playbooken måste skilja kända administrationskommandon från oväntade (till exempel `useradd`, `chmod`, `rm` på loggar, `nmap`). |    
+
+
+## Händelse 4: Datastöld (exfiltration), FIKTIV
+
+Detektionen är fiktiv. Vi har inget bevis för att larmet fungerar: ingen monitor är byggd eller testad och brus är inte mätt.
+
+| Del | Svar |
+|---|---|
+| Loggkälla | Wazuhs larm i `wazuh-alerts-*` som bygger på loggar från våra servrar via loggservern |
+| Fält vi använder | `rule.mitre.id`, `location`, `data.srcip`, `data.dstip`, `data.srcuser` |
+| Riktiga värden | Ej mätt. Vi har ingen riktig träff för `T1041`. Teknikerna som finns i vår data är T1110, T1110.001, T1021, T1021.004, T1078 och T1548.003 (T1041 saknas i listan över värden). |
+| Exempel ur full_log | Ingen riktig loggrad finns |
+| Detektionens fråga (antagen) | `rule.mitre.id: "T1041"` |
+| ATT&CK-teknik | T1041 Exfiltration Over C2 Channel (Exfiltration): data skickas ut över samma kanal som angriparen styr tjänsten med |
+| Gränsfall som inte ska träffa | En känd backup eller synkning till ett tillåtet mål (står i flödestabellen) är inte datastöld. Det intressanta är ett okänt mål, ett tjänstekonto som inte borde skicka ut data, eller jämna mellanrum och stor mängd. |
+| Brus i normaltrafik | Ej mätt |
+| Fönstrets längd | Ej mätt |
+| Träffar per timme | Ej mätt |
+| Falsklarmsrisk | Okänd, eftersom detektionen inte är testad. Troligen medelhög, eftersom legitima backuper och synkningar kan se likadana ut som stöld. |
+| Nästa steg | Sök `rule.mitre.id: "T1041"` över en längre tid och bekräfta om den finns. Bygg annars en riktig monitor (till exempel från vår U6.5-monitor för upprepade uppladdningar), mät brus och testa den. |
