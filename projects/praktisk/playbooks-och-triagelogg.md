@@ -5,7 +5,7 @@
 # Playbook D1 – Brute force mot SSH
 
 **Monitor:** `Brute force SSH elev-10 (T1110)` (regel 5710/5712, se nedbrytning, händelse 1)
-**Testad av:** (elev-10) · **Datum:** (09/11-2026)
+**Testad av:** (elev-10) · **Datum:** (11/11-2026)
 
 ## 1. Förberedelse
 - Monitorn är Enabled och vi vet hur ofta den normalt larmar (5710 cirka 115 per timme, 5712 cirka 4 per timme i normaltrafik, mätt 11 nov 08:05-08:37).
@@ -46,7 +46,7 @@ Skriv alltid ett skäl som någon annan kan kontrollera (sökning, adress, tidss
 # Playbook D2 – Zonöverträdelse (blockerad utgående trafik)
 
 **Monitor:** `Zonöverträdelse elev-10 (ZON-UT-DROP)` (se nedbrytning, händelse 2)
-**Testad av:** (elev-10) · **Datum:** (09/11-2026)
+**Testad av:** (elev-10) · **Datum:** (11/11-2026)
 
 ## 1. Förberedelse
 - Monitorn söker i `wazuh-archives-*` på `data.action: "ZON-UT-DROP"` för vår server. Mätt 9-11 nov: 0 träffar i normaltrafik (0,53 timmar) och 4 träffar på 50 timmar, alla våra egna tester.
@@ -83,6 +83,47 @@ Skriv alltid ett skäl som någon annan kan kontrollera.
 
 ---
 
+# Playbook D3 – Kommando som körs som root (sudo)
+
+**Monitor:** `T1548-Sudo and Sudo Caching elev-43` (regel 5402, se nedbrytning, händelse 3)
+**Testad av:** (elev-43) · **Datum:** (11/11-2026)
+
+## 1. Förberedelse
+- Monitorn är Enabled, tidsramen är 5 minuter och triggern är IS ABOVE 0.
+- Vi vet hur ofta den normalt larmar: cirka 15 larm per timme i normaltrafik (8 larm på 32 minuter, mätt 11 nov 08:05-08:37), nästan alla läsande kommandon från student.
+- Vi vet vilka konton som får använda sudo (student har `(ALL) ALL`) och vilka kommandon som är normalt arbete.
+- Åtkomst till Discover och till servern via jump. Vi vet vem som triagerar.
+
+## 2. Upptäckt och analys
+1. Anteckna tid, server (`location`), vem som körde (`data.srcuser`), som vem (`data.dstuser`) och kommandot (`data.command`). Skriv bara det som står i loggen.
+2. Titta på vad kommandot gör: ett läsande eller känt administrationskommando (till exempel `nft list ruleset`, `tail -n 50 /var/log/secure`, `dnf`, `systemctl status`) eller något oväntat (till exempel `useradd`, `chmod`, `rm`, `systemctl stop`, `nmap`).
+3. **Sök utan serverfilter** (`rule.id: 5402 and data.srcuser: <konto>`): gör samma konto sudo på flera servrar?
+4. Titta på vad som hände före och efter: misslyckade eller ovanliga inloggningar (D1, regel 5712 och 5715) och stoppad utgående trafik (D2) från samma server.
+
+**Eskalera om något av detta stämmer:**
+- kommandot ändrar användare, rättigheter eller loggar (`useradd`, `chmod`, `rm` på loggfiler, `systemctl stop rsyslog`/`auditd`),
+- kommandot skannar eller undersöker nätet (till exempel `nmap`) och ingen i teamet har sagt att det är ett test,
+- sudo sker direkt efter en misslyckad eller ovanlig inloggning,
+- kontot är inte ett konto som ska använda sudo,
+- samma konto gör ovanliga kommandon på flera servrar.
+
+**Avfärda om allt detta stämmer:**
+- kommandot är ett läsande eller känt administrationskommando,
+- det körs av ett konto som får använda sudo, från en vanlig terminal (`data.tty: pts/0`),
+- det går att kontrollera (teamets chatt med tidsstämpel, eller att kommandot ingår i en känd uppgift, till exempel att ladda `zon.nft`).
+Skriv alltid ett skäl som någon annan kan kontrollera.
+
+## 3. Begränsning, utrotning och återställning
+- **Begränsa:** lås kontot eller ta bort sudo-rättigheten om det är misstänkt. Avsluta pågående sessioner.
+- **Utrota:** kontrollera ändringar som kommandot gjort (nya användare, ändrade filer, stoppade tjänster) och återställ dem.
+- **Återställ:** kontrollera att `rsyslog` och `auditd` körs och att loggar fortfarande skickas till loggservern.
+
+## 4. Aktiviteter efter incidenten
+- Skriv en post i triageloggen.
+- Justera monitorn eller undanta kända läsande kommandon om den larmar för ofta. Anteckna vad vi lärde oss.
+
+---
+
 # Triagelogg
 
 ## Post 1 – D1 Brute force (normaltrafik)
@@ -114,10 +155,10 @@ Skäl:           Loggen ligger i normal.log (normaltrafik). Adressen 10.40.2.8 l
                 Applikationszonen 10.40.2.0/23 enligt adressplanen (inget namngivet
                 system på just .8). Ingen lyckad inloggning från adressen
                 (rule.id: 5715 and data.srcip: 10.40.2.8 -> 0 träffar).
-Vad ska göras:  Inget. Regel 5710 ensam ger för mycket brus, så monitorn använder 5712.
+
 ```
 
-## Post 2 – D2 Zonöverträdelse (eget test)
+## Post 2 – D2 Zonöverträdelse
 
 ```
 ID:             T-D2-1
@@ -144,7 +185,37 @@ Bedömning:      Legitimt (eget test)
 Skäl:           Ett eget test kördes på servern: `timeout 3 bash -c 'echo > /dev/tcp/1.1.1.1/8080'`.
                 `date` direkt efter visade 09:36:11 UTC. Tiden stämmer med loggraderna
                 (09:36:08 och 09:36:09). Kontrollera: data.dstip: 1.1.1.1 and data.dstport: 8080 i Discover.
-Vad ska göras:  Inget för den här posten. Stoppade anslutningar efter 11 nov ska triageras
-                separat (se D2-playbooken, Förberedelse).
+
 ```
 
+## Post 3 – D3 Kommando som körs som root (sudo)
+
+```
+ID:             T-D3-1
+Tid:            2026-11-16 07:06 svensk tid (06:06:15 UTC)
+Monitor/regel:  T1548-Sudo and Sudo Caching elev-43, rule.id 5402 (nivå 3)
+Agent/källa:    sudo-raderna i secure på elev-43
+
+OBSERVATION (only what's in the log, no interpretation)
+Source IP:      (ingen, lokal terminal pts/0)
+User:           student, som root (data.dstuser: root)
+Number of events and time span:
+                2 poster inom cirka 30 sekunder (06:06:15 och 06:06:43 UTC)
+Relevant log line(s):
+                sudo: student : TTY=pts/0 ; PWD=/home/student ; USER=root ;
+                COMMAND=/sbin/nft -f /etc/nftables/zon.nft
+                sudo: student : TTY=pts/0 ; PWD=/home/student ; USER=root ;
+                COMMAND=/sbin/nft list ruleset
+Search without host filter (query + result):
+                rule.id: 5402 and data.srcuser: student (Last 7 days)  ->  170 träffar,
+                varav 43 på elev-43. Resten kommer från andra servrar.
+
+SLUTSATS
+Vad hände:      Kontot student körde med sudo först ett kommando som läser in
+                regelfilen zon.nft i brandväggen, och därefter ett kommando som listar reglerna.
+Vad berördes:   elev-43, paketfiltret (nftables). Ingen ny användare eller ändrad loggfil syns.
+Bedömning:      Legitimt (administrationsarbete)
+Skäl:           Kommandona gäller teamets egen regelfil (/etc/nftables/zon.nft, finns i repot)
+                och körs interaktivt från student (har sudo enligt skyddsbeskrivningen),
+                direkt efter varandra: ladda regler, kontrollera dem. Jesper (elev-43) kan
+                bekräfta att det var han vid den tiden.
