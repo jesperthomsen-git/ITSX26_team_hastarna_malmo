@@ -147,4 +147,37 @@ verifiera-hardning:
   GÄLLER: zonvakt kör i domänen zonvakt_t
   GÄLLER: /srv/zonwebb har typen httpd_sys_content_t
 felkod: 0
-```
+```  
+
+## 7. Metodbilaga
+
+### 7.1 Underlag
+- Min härdningslista (4 rader).
+- Utdata från sestatus, semodule, ps -eZ, ls -Zd och verifiera-hardning (se avsnitt 6).  
+
+
+### 7.3 Råsvar, oredigerat
+1. SELinux är aktiverat och står i läget Enforcing just nu.
+2. SELinux är konfigurerat att starta i Enforcing efter omstart.
+3. Tjänsten zonvakt kör i den egna domänen zonvakt_t.
+4. Policymodulen zonvakt är laddad.
+5. Domänen zonvakt_t är inte permissiv. Alla överträdelser stoppas och loggas.
+6. Katalogen /srv/zonwebb har typen httpd_sys_content_t.
+7. Typen på /srv/zonwebb sätts av en bestående regel i policyn, så den tål en
+   relabel.
+8. Tjänsten zonvakt kan inte skriva till /etc. När den får kommandot overtrad
+   blir den nekad och ingen fil skapas.
+9. Paketfiltret släpper bara in ctf-servern 172.20.1.10, och bara på tcp/80
+   och tcp/7510.
+10. Verifieringsskriptet verifiera-hardning kontrollerar fyra saker och
+    avslutar med felkod 0 när allt gäller, även efter omstart.
+
+### 7.4 Rättelselogg
+Se avsnitt 3. Jag rättade påstående 5 och 9 efter att ha kört kommandon på
+servern.
+
+### 7.5 Utelämningslista
+- Inga lösenord, nycklar eller tokens skickades till AI.
+- Vid tidigare uppgifter i veckan klistrade jag in en del CTF-information och
+  interna adresser i samma chatt. Nästa gång maskerar jag sådant med
+  platshållare (till exempel <FLAGGA> och <IP>) innan jag skickar det.
