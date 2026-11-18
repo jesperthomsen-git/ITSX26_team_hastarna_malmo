@@ -22,4 +22,3 @@ Jag använde AI som stöd för att strukturera ett förslag på tillitsregler ut
 | 2. Playbooks D1, D2, D3 | Jag bad AI skriva ett utkast till playbooks med NIST:s fyra faser. | AI skrev utkast med faserna och när man ska eskalera eller avfärda. | Jag läste varje steg mot det jag själv sett i loggarna och kollade att faserna hålls isär. | Jag lät inte AI skriva "testad av" och datum. Det ska fyllas i av den som testar. | En playbook ska kunna följas av en främling, och varje avfärdande behöver ett skäl som går att kolla i loggen. |
 | 3. Triagelogg | Jag bad AI formulera tre triageposter av mina loggrader. | AI delade upp dem i vad som hände, vad som berördes och vad som ska göras. | Jag kollade att observationen bara är det som står i loggen. Jag jämförde tiderna i D2 med `date` efter mitt eget test. | Jag tog bort sådant jag inte kunde bevisa. | Observation är det jag ser. Slutsats är det jag drar av det. De ska hållas isär. |
 =======
->>>>>>> origin/main
