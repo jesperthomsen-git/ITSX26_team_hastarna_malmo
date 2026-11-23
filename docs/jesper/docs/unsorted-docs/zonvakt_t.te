@@ -1,0 +1,66 @@
+policy_module(zonvakt, 1.0.0)
+
+########################################
+#
+# REFLEKTIONER:
+# ~/policy/zonvakt-noteringar.md
+
+
+########################################
+#
+# Declarations
+#
+
+type zonvakt_t;
+type zonvakt_exec_t;
+init_daemon_domain(zonvakt_t, zonvakt_exec_t)
+
+#permissive zonvakt_t;
+
+type zonvakt_log_t;
+logging_log_file(zonvakt_log_t)
+
+########################################
+#
+# zonvakt local policy
+#
+
+allow zonvakt_t self:fifo_file rw_fifo_file_perms;
+allow zonvakt_t self:unix_stream_socket create_stream_socket_perms;
+allow zonvakt_t self:tcp_socket { create getattr setopt bind listen accept write read };
+#custom setting för name_bind
+type zonvakt_port_t;
+# gen_require deklarerar att policyn behöver en attribut/typ
+
+gen_require(`
+        attribute port_type;
+        type node_t;
+')
+typeattribute zonvakt_port_t port_type;
+
+# deklarerar port_type som blir portens SELinux-typ som nu är zonvakt_port_t som tillhör port_type
+allow zonvakt_t zonvakt_port_t:tcp_socket name_bind;
+
+allow zonvakt_t node_t:tcp_socket node_bind;
+#tillåta bindning till porttypen zonvakt_port_t, som vi kopplat till port 7543
+#nftables har nya regler satta som exempel mot least priv. och DiD
+
+
+#gamla regler
+#allow zonvakt_t self:tcp_socket { create setopt};
+#allow zonvakt_t self:tcp_socket { create bind setopt};
+#allow zonvakt_t self:tcp_socket { create getattr setopt};
+#allow zonvakt_t self:tcp_socket { create getattr setopt bind };
+#allow zonvakt_t self:tcp_socket { create getattr setopt bind listen };
+
+manage_dirs_pattern(zonvakt_t, zonvakt_log_t, zonvakt_log_t)
+manage_files_pattern(zonvakt_t, zonvakt_log_t, zonvakt_log_t)
+manage_lnk_files_pattern(zonvakt_t, zonvakt_log_t, zonvakt_log_t)
+logging_log_filetrans(zonvakt_t, zonvakt_log_t, { dir file lnk_file })
+
+domain_use_interactive_fds(zonvakt_t)
+
+files_read_etc_files(zonvakt_t)
+
+miscfiles_read_localization(zonvakt_t)
+corecmd_mmap_bin_files(zonvakt_t)

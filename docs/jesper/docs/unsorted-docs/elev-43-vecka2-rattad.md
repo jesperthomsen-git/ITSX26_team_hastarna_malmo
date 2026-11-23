@@ -8,15 +8,46 @@ värdar
 | IP | Nätadress | broadcastadress | första och sista | antal användbara värdar | Rättat svar | ✓/? | Din kommentar |
 |---|---:|---:|---:|---:|---:|:---:|---|
 | 10.40.5.130/25 | 10.40.5.128/25 | 10.40.5.255/25 | 10.40.5.129-254 | 126 | 128–255 | ✓ | Helt rätt! |
-| 10.40.77.200/26 | 10.40.77.192/26 | 10.40.77.255/26 | 10.40.77.193-254 | 62 | 0 | ? | Nät och broadcast inte rätt /rättat e43|
-| 10.40.101.37/28 | 10.40.101.32/28 | 10.40.101.47/28 | 10.40.101.33-46/28 | 14 | 32-47 | ? | broadcast och sista användbara /rättat e43|
+| 10.40.77.200/26 | 10.40.77.191/26 | 10.40.77.256/26 | 10.40.77.192-255 | 62 | 0 | ? | Nät och broadcast inte rätt |
+| 10.40.101.37/28 | 10.40.101.32/28 | 10.40.101.48/28 | 10.40.101.33-47/28 | 14 | 32-47 | ? | broadcast och sista användbara |
 | 10.40.9.250/29 | 10.40.9.248/29 | 10.40.9.255/29 | 10.40.9.249-254 | 6 | 248-255 | ✓ | helt rätt! |
-| 10.40.70.66/30 | 10.40.70.64/30 | 10.40.70.67/30 | 10.40.70.65-66 | 2 | 0 | ? | Nät, brodcast samt interval blev inte rätt /rättat e43|
-| 10.40.150.10/22 | 10.40.148.0/22 | 10.40.151.255/22 | 10.40.148.1 - 10.40.151.254 | 1022 | 148-151.254 | ? | Broadcast och sista blev inte rätt  /rättat e43|
+| 10.40.70.66/30 | 10.40.70.63/30 | 10.40.70.68/30 | 10.40.70.64-67 | 2 | 0 | ? | Nät, brodcast samt interval blev inte rätt |
+| 10.40.150.10/22 | 10.40.148.0/22 | 10.40.152.255/22 | 10.40.148.1 - 10.40.152.254 | 1022 | 148-151.254 | ? | Broadcast och sista blev inte rätt  |
 | 10.40.45.1/20 | 10.40.32.0/20 | 10.40.47.255/20 | 10.40.32.1 - 10.40.47.254 | 4094 | 0 | ✓ | Helt rätt! |
 
 
 **Kommentar:**  
+R2 - 10.40.77.200  
+64+64+64 =192
+64+64+64+64 =256
+Nätaddress = 192
+broadcast=255
+Första användbara=193
+sista användbara = 255 
+
+R3 - 10.40.101.37/28
+16+16=32
+16+16+16=48
+Nätaddress=32
+broadcast=47
+Första användbara=33
+sista användbara=46
+
+R5 - 10.40.70.66/30
+nätaddress= 64
+broadcast=67
+Första användbara=65
+sista användbara=66
+
+R6 - 10.40.45.1/20
+/20 = 16 delar
+40 / 16 = 2.5
+2 * 16 = 32
+nätaddress= 32
+broadcast=47
+Första användbara=33
+sista användbara=46
+
 
 ---
 

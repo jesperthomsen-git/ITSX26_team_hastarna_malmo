@@ -31,13 +31,6 @@
 | 254 | 7 |
 | 255 | 8 |
 
-Om 3:e oktetten används = -1 i total summan av oktetten
-t.ex 10.40.150.10/22
-/22 har 4 delar 
-148-152, -1
-148-151.255
-
-
 antalet delar multipliceras med 2 och adresser per del divideras med 2. efter uträkning används 2 addresser per del reserverade 
 
 Så /27 som har 8 delar har 16 addresser reserverade totalt med 30 oreserverade addresser i var del
@@ -80,6 +73,17 @@ ta bort talet du får med 256 = antalet addresser per del
 128		192		224		240	248	252	254	255
 
 /18-/23 räknas som t.ex /21 = 0, 8, 16, 24, 32, 40, 48, 56
+
+
+
+Om 3:e oktetten används = -1 i total summan av oktetten
+t.ex 10.40.150.10/22
+
+/22 har 4 delar 
+150 / 4 = 37,5 # avrunda ner
+37 * 4 = 148
+NetIP = 148
+BCIP = 151
 
 allt över /24 räknas med division:
 /28 = 16 delar
