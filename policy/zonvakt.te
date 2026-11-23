@@ -1,0 +1,52 @@
+policy_module(zonvakt, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type zonvakt_t;
+type zonvakt_exec_t;
+init_daemon_domain(zonvakt_t, zonvakt_exec_t)
+
+
+type zonvakt_log_t;
+logging_log_file(zonvakt_log_t)
+
+########################################
+#
+# zonvakt local policy
+#
+allow zonvakt_t self:fifo_file rw_fifo_file_perms;
+allow zonvakt_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(zonvakt_t, zonvakt_log_t, zonvakt_log_t)
+manage_files_pattern(zonvakt_t, zonvakt_log_t, zonvakt_log_t)
+manage_lnk_files_pattern(zonvakt_t, zonvakt_log_t, zonvakt_log_t)
+logging_log_filetrans(zonvakt_t, zonvakt_log_t, { dir file lnk_file })
+
+domain_use_interactive_fds(zonvakt_t)
+
+files_read_etc_files(zonvakt_t)
+
+miscfiles_read_localization(zonvakt_t)
+
+require {
+    type bin_t;
+    class file { map execute execute_no_trans open read getattr };
+}
+# Tillåt körning och mmap av /usr/bin/env och python3 i bin_t
+allow zonvakt_t bin_t:file { map execute execute_no_trans open read getattr };
+
+# Tillåt TCP-socket och bindning för tjänsten på port 7505
+allow zonvakt_t self:tcp_socket create_stream_socket_perms;
+allow zonvakt_t self:tcp_socket { listen accept };
+corenet_tcp_bind_generic_node(zonvakt_t)
+corenet_tcp_bind_generic_port(zonvakt_t)
+
+require {
+        type zonvakt_t;
+}
+
+#============= zonvakt_t ==============
+files_delete_etc_dir_entry(zonvakt_t)
