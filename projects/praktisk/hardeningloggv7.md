@@ -1,3 +1,5 @@
+# Hardening logg 2026-11-23
+
 | elev-NN | getenforce && sudo semodule -l && ps -eZ | sudo /usr/local/bin/verifiera-hardning | sudo ss -tulpen | Godkänt på tre kommandon? |
 |---|---|---|---|---|
 | elev-05 | träff på kommandot | Kommandot ger utskrift på vad som 'GÄLLER' från bash-skriptet | tcp          LISTEN        0             5                          0.0.0.0:7505                    0.0.0.0:*            users:(("zonvakt",pid=1010,fd=3)) | X |
