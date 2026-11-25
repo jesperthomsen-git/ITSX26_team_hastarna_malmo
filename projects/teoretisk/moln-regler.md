@@ -15,6 +15,7 @@ ut tcp 514 172.20.1.58 “D5 allow firewall logs to log server”
 ## D6
 ut udp 67 172.20.0.1 “D6 allow DHCP to eth1 server”
 ut udp 67 10.40.4.1 “D6 allow DHCP to eth2 server”
+ut udp 67 172.31.1.1 "D6 DHCP allow out"
 ## D7
 ut tcp 443 0.0.0.0 “D7 allow package updates”  
 
@@ -34,6 +35,8 @@ in tcp 5432 10.40.4.20 “F3 allow database connections from application”
 ### elev-35:
 ut tcp 80 10.40.4.10 “F4 allow staff client access to portal”  
 
+#### uppdateringar:
+2026-11-16 jesperthomsen-git@elev-43: ut udp 67 172.31.1.1 "D6 DHCP allow out"
 
 # Molnregler – Team 4 Hästarna
 
@@ -43,8 +46,12 @@ Utskrift av `moln brandvägg regel lista` på jump:
 
 | Nr | Riktning | Protokoll | Port | Adress | Beskrivning |
 |---|---|---|---|---|---|
+| 3 | ut | udå | 67 | 172.31.1.1/24 | D6 DHCP allow out |
 | 5 | ut | udp | 123 | 0.0.0.0/0 | D4 NTP |
 | 6 | ut | tcp | 443 | 0.0.0.0/0 | D7 uppdateringar |
+
+##### upddateringar:
+2026-11-16 jesperthomsen-git@elev-43: | 3 | ut | udå | 67 | 172.31.1.1/24 | D6 DHCP allow out |
 
 ## elev-05 (Ludvig, webb)
 
@@ -62,7 +69,10 @@ Ludvig lägger reglerna själv från sitt eget konto på jump. Nummer och exakt 
 
 - Molnbrandväggen filtrerar bara det publika gränssnittet. Trafik i privata nät (labbnätet och teamnätet) passerar den inte.
 - D1, D2, D5, F2, F3 och F4 går i privata nät och filtreras på värden med nftables.
-- D3 (DNS mot Hetzners resolvrar) och D6 (DHCP) släpper molnet alltid.
+- D3 (DNS mot Hetzners resolvrar) och D6 (DHCP(172.20.0.1, 10.40.4.1, 172.31.1.1)) släpper molnet alltid.
 - F1 är det enda flödet som kommer utifrån, så den behöver en molnregel hos den som kör webbservern.
 - Den första utgående regeln stänger all annan utgående trafik mot internet, så D4 och D7 skrevs direkt efter varandra.
 - Inga inkommande regler behövs för elev-10, som saknar publik tjänst.
+
+#### uppdateringar:
+2026-11-16 jesperthomsen-git@elev-43: D3 (DNS mot Hetzners resolvrar) och D6 (DHCP(172.20.0.1, 10.40.4.1, 172.31.1.1)) släpper molnet alltid. 
